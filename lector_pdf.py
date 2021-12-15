@@ -9,10 +9,11 @@ def excel(ruta_excel, afiliado):
         hoja = excel["inicio"]
         hoja["B9"].value = str(afiliado)
     except:
-        pass
+        print("Ha ocurrido una excepcion.")
     finally:
         excel.save(ruta_excel)
         excel.close()
+
 
 def leer_pdf(ruta_pdfs):
     # archivo_pdf = "LEGUIZAMON-SCIENZA.pdf"
@@ -31,6 +32,7 @@ def leer_pdf(ruta_pdfs):
       print(afiliado)
 
     return afiliado
+
 
 ruta = "C:\\Users\\aalarcon\\Desktop\\OyP\\CASA\\pdfs"
 ruta_excel = "C:/Users/aalarcon/Desktop/OyP/CASA/eurosistemas.xlsx"
