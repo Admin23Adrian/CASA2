@@ -19,3 +19,7 @@
 
 ## 15/12/2021
 1. Dejo la pagina que usamos para armar las expresiones regulares [Regex101](https://regex101.com/)
+2. Esta seria al expresion para extraer afiliados del pdf de CASA:
+```
+([a-zA-Z]{2})|([0-9]{5,13})([/][0-9]{1,2})*
+```
