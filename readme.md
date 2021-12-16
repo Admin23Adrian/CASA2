@@ -1,9 +1,7 @@
-# ******************************************************************* #
-#             FACTURACION AUTOMATICA CON LECTURA DE PDFS              #
-# ******************************************************************* #
+# FACTURACION AUTOMATICA CON LECTURA DE PDFS
 
-# POR FAVOR ACTUALIZAR LOS AVANZES DEL DESARROLLO EN ESTE ARCHIVO. ES IMPORTANTE A MODO DE ARMAR BUENAS PRACTICAS EN LOS DESARROLLOS.
 
+POR FAVOR ACTUALIZAR LOS AVANZES DEL DESARROLLO EN ESTE ARCHIVO. ES IMPORTANTE A MODO DE ARMAR BUENAS PRACTICAS EN LOS DESARROLLOS.
 
 ## 13/12/2021
 1. Buscamos opciones sobre como leer pdfs ya que con PyPDF2 no tuvimos resultados.
