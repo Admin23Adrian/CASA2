@@ -2,7 +2,7 @@ import slate3k
 import re
 import openpyxl
 import os
-# importando modulos propios
+
 import rutas
 import regex
 
@@ -32,16 +32,20 @@ def leer_pdf(ruta_pdfs):
         lectura = slate3k.PDF(archivo)
     
     texto = str(lectura[0])
-    regex = r'(CASA\n\n)([0-9]+/[0-9]{1,2})'
+    regex_afiliado = r'(CASA\n\n)([0-9]+/[0-9]{1,2})'
+    regex_medicacion = r"([A-Z]+\s\d+)(\s[a-z]{1,2}|[A-Z]{1,3})"
 
-    for m in re.findall(regex,texto):
-        afiliado = m[1]
-        if afiliado != None:
-            print(f"\t\t> AFILIADO ENCONTRADO: {afiliado}")
-            return afiliado
-        else:
-            print("\t\tNo se pudo encontrar el dato de afiliado dentro del pdf.")
-            return
+    for a in re.findall(regex_afiliado, texto):
+        print(f"\t\tAFILIADO ---> {a[1]}")
+        # afiliado = m[1]
+        # if afiliado != None:
+    #         print(f"\t\t> AFILIADO ENCONTRADO: {afiliado}")
+    #         return afiliado
+    #     else:
+    #         print("\t\tNo se pudo encontrar el dato de afiliado dentro del pdf.")
+    #         return
+    for m in re.findall(regex_medicacion, texto):
+        print(f"\t\tMEDICACION ---> {m[0]} {m[1]}")
 
 
 # --- ARRANQUE DEL PROCESO PRINCIPAL --- 
