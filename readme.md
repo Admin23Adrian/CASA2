@@ -21,3 +21,11 @@ POR FAVOR ACTUALIZAR LOS AVANZES DEL DESARROLLO EN ESTE ARCHIVO. ES IMPORTANTE A
 ```
 ([a-zA-Z]{2})|([0-9]{5,13})([/][0-9]{1,2})*
 ```
+
+# 17/12/2021
+1. Ayer se avanzo con la expresion regular para extraer el nombre del medicamento del PDF.
+2. Obtuvimos el listado de materiales disponibles que el cliente tiene a disposicion en sap.
+3. La expresion regular construida hasta el momento para el medicamento:
+ ```
+ ([A-Z]+\s\d+)(\s[a-z]{1,2}|[A-Z]{1,3})
+ ```
