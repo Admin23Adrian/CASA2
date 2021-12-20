@@ -16,6 +16,8 @@ def excel(ruta_excel, afiliado, medicacion, fl):
         print(f"\t\t> Se accedio correctamente.")
         hoja[f"B{fl}"].value = afiliado
         hoja[f"C{fl}"].value = medicacion
+
+        # Verificamos si el valor se pego correctamente en las celdas.
         if hoja[f"B{fl}"].value != None:
             print(f"\t\t> El afiliado {afiliado} se pego correctamente al Excel.")
         else:
@@ -27,34 +29,46 @@ def excel(ruta_excel, afiliado, medicacion, fl):
             print(f"\t\t> La medicacion {afiliado} NO SE HA PODIDO PEGAR EN EL EXCEL. Se deja LOG.")
     except:
         print("Ha ocurrido una excepcion. Posiblemente hay un error con el EXCEL.")
+    # Guardamos y cerramos el excel.
     finally:
         excel.save(ruta_excel)
         excel.close()
 
-
+# Funcion que se encarga de leer el texto del pdf y extraer afiliad y medicacion.
 def leer_pdf(ruta_pdfs):
+
+    # Usamos la libreria Slate3k para extraer el texto del pdf.
     with open(ruta_pdfs, "rb") as archivo:
         print(f"\t\t> Leyendo capa texto del pdf...")
+        # Se devuelve el texto como un string dentro de una lista.
         lectura = slate3k.PDF(archivo)
     
+    # Seleccionar el texto dentro de la lista
     texto = str(lectura[0])
-    # print(lectura)
+    
+    # Declaramos las expresiones para encontrar el AFILIADO y MEDICACION dentro del texto.
     regex_afiliado = r'(CASA\n\n)([0-9]+/[0-9]{1,2})'
     regex_medicacion = r'([A-Z]+\s\d+)(\s[a-z]{1,2}|[A-Z]{1,3})(.[a-zA-Z0-9+ .]*)'
+    
+    # Intentamos encontrar la expresion dentro del texto.
     try:
+        # Buscamos afiliado.
         for a in re.findall(regex_afiliado, texto):
+            # El resultado devuelto son dos tuplas(por tener dos grupos) y seleccionamos la del indice 1.
             afiliado = a[1]
-            
+
+        # Buscamos la medicacion.  
         for m in re.findall(regex_medicacion, texto):
             medicacion = f"{m[0]} {m[1]} {m[2]}"
-
+    # Caso no se encuentre nada, devolvemos la ruta del pdf para saber con cual no se pudo extraer el texto.
     except Exception as e:
         return e, ruta_pdfs
     
+    # Validamos afiliado y medicacion.
     if afiliado != None and medicacion != None:
-        print(f"\t\t> AFILIADO ENCONTRADO: {afiliado}")
-        print(f"\t\t> MEDICACION ENCONTRADA: {medicacion}")
-        return afiliado, medicacion
+        print(f"\t\t> AFILIADO ENCONTRADO: {afiliado}") # Mostramos que se encontro el afiliado
+        print(f"\t\t> MEDICACION ENCONTRADA: {medicacion}") # Mostramos que se encontro la medicacion
+        return afiliado, medicacion # Devolvemos los valores en la funcion.
     else:
         print("\t\tNo se pudo encontrar el dato de afiliado o el medicamento dentro del pdf.")
         return
