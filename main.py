@@ -6,7 +6,24 @@ import os
 import rutas
 import regex
 
-# Funcion que va a pegar los datos al excel y los guarda. Parametro fl = (fila excel)
+# Limpiar y unir los datos que vienen el tuplas.
+def armar_descripcion_medicamento(lista):
+    pass
+
+
+
+# Funcion que limpia los caracteres "\n" del texto del pdf:
+def limpiar_caracteres(texto_lista):
+    if texto_lista != []:
+        lista = texto_lista.split("\n")
+        nueva_lista = [x for x in lista if x != '']
+        return " ".join(nueva_lista)
+    else:
+        return False
+
+
+
+# Pegar datos a Excel. Parametro fl = (fila excel)
 def excel(ruta_excel, afiliado, medicacion, fl):
     print(f"\t\t# INTENTANDO ACCEDER AL EXCEL...")
     excel = openpyxl.load_workbook(ruta_excel)
@@ -34,60 +51,53 @@ def excel(ruta_excel, afiliado, medicacion, fl):
         excel.close()
 
 
-# Funcion que se encarga de leer el texto del pdf y extraer afiliad y medicacion.
+
+# Leer pdf y sacar medicacion
 def leer_pdf(ruta_pdfs):
+
+    # -- VARIABLES -- #
+    juego_tuplas_medicamentos = []
+    lista_afiliado = []
+    
 
     # Usamos la libreria Slate3k para extraer el texto del pdf.
     with open(ruta_pdfs, "rb") as archivo:
         print(f"\t\t> Leyendo capa texto del pdf...")
-        # Se devuelve el texto como un string dentro de una lista.
-        lectura = slate3k.PDF(archivo)
+        lectura = slate3k.PDF(archivo)  # Se devuelve el texto como un string dentro de una lista.  
+    
+    nuevo_texto = limpiar_caracteres(lectura[0])
+    
+    # == EXPRESIONES REGULARES == #
+    regex_codigo_medicacion = r'(Productos\s)([0-9]*\s*)([A-Z]*\s*)([a-zA-Z0-9./+]*\s*)([(a-zA-Z0-9/+).+]*\s*)([(a-z0-9/+).+]*\s*)([a-z0-9./+ ]*)|(Observ:\s)([0-9]*\s*)([A-Z]*\s*)([a-zA-Z0-9.]*\s*)([(a-zA-Z).+]*\s*)([(a-zA-z0-9).+]*\s*)([a-z0-9+. ]*)'
+    regex_afiliado = r'([0-9]{5,13})([\/]\d{1,2}\s)([A-Z, ]+)'
+    
+
+    try:
+        # AFILIADO
+        for a in re.findall(regex_afiliado, nuevo_texto):
+            lista_afiliado.append(a)
+
+        # MEDICACION y CANTIDADES
+        for m in re.findall(regex_codigo_medicacion, nuevo_texto):
+            juego_tuplas_medicamentos.append(m)
         
     
-    # Seleccionar el texto dentro de la lista
-    print(lectura)
-    # texto = str(lectura[0])
-    
-    # Declaramos las expresiones para encontrar el AFILIADO y MEDICACION dentro del texto.
-    regex_afiliado = r'(CASA\n\n)([0-9]+/[0-9]{1,2})'
-    regex_medicacion = r'([A-Z]+\s\d+)(\s[a-z]{1,2}|[A-Z]{1,3})(.[a-zA-Z0-9+ .]*)'
-    regex_cantidad = r'\n\d{1}\n'
-    
-    # Intentamos encontrar la expresion dentro del texto.
-    try:
-        # Buscamos afiliado.
-        # El resultado devuelto son dos tuplas(por tener dos grupos) y seleccionamos la del indice 1.
-        for a in re.findall(regex_afiliado, texto):
-            afiliado = a[1]
-
-        # Buscamos la medicacion.  
-        for m in re.findall(regex_medicacion, texto):
-            # medicacion = f"{m[0]} {m[1]} {m[2]}"
-            medicacion = m
-
-        # Buscamos la cantidad de medicacion.
-        for med in re.findall(regex_cantidad, texto):
-            cantidad = med.rstrip()
-    # Caso no se encuentre nada, devolvemos la ruta del pdf para saber con cual no se pudo extraer el texto.
     except Exception as e:
         return e, ruta_pdfs
     
-    # Validamos afiliado y medicacion.
-    if afiliado != None and medicacion != None:
-        print(f"\t\t> AFILIADO ENCONTRADO: {afiliado}") # Mostramos que se encontro el afiliado
-        print(f"\t\t> MEDICACION ENCONTRADA: {medicacion}") # Mostramos que se encontro la medicacion
-        print(f"\t\t> Cantidad encontrada: {cantidad.lstrip()}")
-        return afiliado, medicacion # Devolvemos los valores en la funcion.
+    # # Validamos afiliado y medicacion.
+    if lista_afiliado != []:
+        return lista_afiliado, 
     else:
-        print("\t\tNo se pudo encontrar el dato de afiliado o el medicamento dentro del pdf.")
-        return
+        return False
+
 
 
 # --- ARRANQUE DEL PROCESO PRINCIPAL --- #
 if __name__ == "__main__":
     try:
         fila = 9
-        # Se recorre la ca arpeta de los pdf y se envia la lectura.
+        # Se recorre la carpeta de los pdf y se envia la lectura.
         print(">>> Ingresando a la carpeta de PDFS.")
         for pdf in os.listdir(rutas.carpeta_pdfs):
             print("---------------------------------------------------")

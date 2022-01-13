@@ -1,0 +1,5 @@
+### EXPRESION QUE DIO RESULTADO PARA ENCONTRAR LOS MEDICAMENTOS EN LOS PDF ###
+
+regex_codigo_medicacion = r'(Productos\s)([0-9]*\s*)([A-Z]*\s*)([a-zA-Z0-9./+]*\s*)([(a-zA-Z0-9/+).+]*\s*)([(a-z0-9/+).+]*\s*)([a-z0-9./+ ]*)|(Observ:\s)([0-9]*\s*)([A-Z]*\s*)([a-zA-Z0-9.]*\s*)([(a-zA-Z).+]*\s*)([(a-zA-z0-9).+]*\s*)([a-z0-9+. ]*)'
+
+### --------------------------------------------------------------------- ###

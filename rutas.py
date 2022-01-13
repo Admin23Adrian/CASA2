@@ -12,3 +12,4 @@ archivo_excel = os.path.join(directorio_archivos, "casa.xlsx")
 
 # --> Ruta carpeta de pdfs.
 carpeta_pdfs = os.path.join(directorio_raiz, "pdfs")
+# carpeta_pdfs = os.path.join(directorio_raiz, "Pdfs OK")
