@@ -29,3 +29,10 @@ POR FAVOR ACTUALIZAR LOS AVANZES DEL DESARROLLO EN ESTE ARCHIVO. ES IMPORTANTE A
  ```
  ([A-Z]+\s\d+)(\s[a-z]{1,2}|[A-Z]{1,3})
  ```
+
+## 14/01/2022
+1. La expresion regular anteriormente publicada no funcionaba del todo bien para encontrar todas las posiciones de medicacion dentro del pdf.
+2. Paso a dejar la Regex con la que tuve resultado.
+```
+r'(Productos\s)([0-9]*\s*)([A-Z]*\s*)([a-zA-Z0-9./+]*\s*)([(a-zA-Z0-9/+).+]*\s*)([(a-z0-9/+).+]*\s*)([a-z0-9./+ ]*)|(Observ:\s)([0-9]*\s*)([A-Z]*\s*)([a-zA-Z0-9.]*\s*)([(a-zA-Z).+]*\s*)([(a-zA-z0-9).+]*\s*)([a-z0-9+. ]*)'
+```

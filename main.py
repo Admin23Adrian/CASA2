@@ -7,8 +7,22 @@ import rutas
 import regex
 
 # Limpiar y unir los datos que vienen el tuplas.
-def armar_descripcion_medicamento(lista):
-    pass
+def armar_descripcion_medicamento(lista_medicacion):
+    lista = []
+    # print(lista_medicacion)
+    for grupo in lista_medicacion:
+        palabras = []
+        for elem in grupo:
+            if elem != "" and elem != "Productos " and elem != "Observ: ":
+                palabras.append(elem)
+        lista.append(palabras)
+    
+    print()
+    for i in range(len(lista)):
+        # print("".join(lista[i]))
+        print(lista[i])
+
+
 
 
 
@@ -71,7 +85,6 @@ def leer_pdf(ruta_pdfs):
     regex_codigo_medicacion = r'(Productos\s)([0-9]*\s*)([A-Z]*\s*)([a-zA-Z0-9./+]*\s*)([(a-zA-Z0-9/+).+]*\s*)([(a-z0-9/+).+]*\s*)([a-z0-9./+ ]*)|(Observ:\s)([0-9]*\s*)([A-Z]*\s*)([a-zA-Z0-9.]*\s*)([(a-zA-Z).+]*\s*)([(a-zA-z0-9).+]*\s*)([a-z0-9+. ]*)'
     regex_afiliado = r'([0-9]{5,13})([\/]\d{1,2}\s)([A-Z, ]+)'
     
-
     try:
         # AFILIADO
         for a in re.findall(regex_afiliado, nuevo_texto):
@@ -87,7 +100,7 @@ def leer_pdf(ruta_pdfs):
     
     # # Validamos afiliado y medicacion.
     if lista_afiliado != []:
-        return lista_afiliado, 
+        return lista_afiliado, juego_tuplas_medicamentos
     else:
         return False
 
@@ -104,9 +117,13 @@ if __name__ == "__main__":
             print("\tListando PDF:")
             if pdf.endswith(".pdf"):
                 print(f"\t\t* {pdf}")
-                # afiliado, medicacion = leer_pdf(os.path.join(rutas.carpeta_pdfs, pdf))
-                leer_pdf(os.path.join(rutas.carpeta_pdfs, pdf))
-                # excel(rutas.archivo_excel, afiliado, medicacion, fila)
+                lista_afiliado, lista_tuplas_medicacion = leer_pdf(os.path.join(rutas.carpeta_pdfs, pdf))
+                
+                if lista_afiliado != False and lista_tuplas_medicacion != False:
+                    armar_descripcion_medicamento(lista_tuplas_medicacion)
+                else:
+                    print(f"\t\t No se pudo encontrar medicacion para el PDF {pdf}")
+                
                 fila = fila + 1
 
     except Exception as e:
