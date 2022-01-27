@@ -1,34 +1,43 @@
-import slate3k
+import slate3k #La libreria para sacar la capa texto.
 import re
 import openpyxl
 import os
 import time
-
-import rutas
+import rutas #importacion de modulo donde defino las rutas.
 import regex
 
+
+def armar_diccionario_medicacion_cantidades(lista_med, lista_cant):
+    pass
+
 # Limpiar y unir los datos que vienen el tuplas.
-def armar_descripcion_medicamento(lista_medicacion, lista_cantidades):
+def limpiar_grupos(lista_medicacion):
     lista = []
+    cantidades = []
     diccionario_relacional = {}
     
     # DESARMAR TUPLAS Y ARMAR LISTAS PARA PODER MODIFICARLAS Y LIMPIAR LOS ESPACIOS EN BLANCO.
     k = 1
     for grupo in lista_medicacion:
         palabras = []
-        if k != len(lista_medicacion):
+        if k < len(lista_medicacion):
             for elem in grupo:
                 if elem != "" and elem != "Productos " and elem != "Observ: ":
-                    palabras.append(elem)
+                    palabras.append(elem.rstrip())
             lista.append(palabras)
-        k += 1
-    print("")
-    # Armamos un diccionario para hacer la relacion {material: cantidad}
-    # print(f"LISTA DE MEDICAMENTOS:{lista}. {len(lista)}")
-    # print(f"LISTA DE CANTIDADES: {lista_cantidades}. {len(lista_cantidades)}")
+            # print(palabras)
 
+        # Por este camino entraria si es el ultimo grupo (grupo de cantidades)
+        else:
+            for cant in grupo:
+                if cant != "" and cant != "Productos " and cant != "Observ: ":
+                    palabras.append(cant.rstrip())
+            cantidades.append(palabras)
+            # print(palabras)
+        k = k + 1
+    
 
-
+    return lista, cantidades
 
 
 
@@ -87,12 +96,13 @@ def leer_pdf(ruta_pdfs):
         lectura = slate3k.PDF(archivo)  # Se devuelve el texto como un string dentro de una lista.  
     
     nuevo_texto = limpiar_caracteres(lectura[0])
-    print(nuevo_texto)
+    # print(nuevo_texto)
     
     # == EXPRESIONES REGULARES == #
-    regex_codigo_medicacion = r'(Productos\s)([0-9]*\s*)([A-Z]*\s*)([a-zA-Z0-9./+]*\s*)([(a-zA-Z0-9/+).+]*\s*)([(a-z0-9/+).+]*\s*)([a-z0-9./+ ]*)|(Observ:\s)([0-9]*\s*)([A-Z]*\s*)([a-zA-Z0-9.]*\s*)([(a-zA-Z).+]*\s*)([(a-zA-z0-9).+]*\s*)([a-z0-9+. ]*)'
+    regex_codigo_medicacion = r'(Productos\s)([0-9]*\s*)([A-Z]*\s*)([a-zA-Z0-9./+]*\s*)([(a-zA-Z0-9/+).+]*\s*)([(a-z0-9/+).+]*\s*)([a-z0-9./+ ]*)|(Observ:\s)([0-9]*\s*)([A-Z]*\s*)([a-zA-Z0-9.]*\s*)([(a-zA-Z).+]*\s*)([(a-zA-z0-9).+]*\s*)([a-z0-9 +.]*)'
     regex_afiliado = r'([0-9]{5,13})([\/]\d{1,2}\s)([A-Z, ]+)'
-    regex_cantidades = r"(Observ:\s)([0-9]*\s)"
+    regex_cantidades = r'Observ:\s(\d{1,2}\s)+'
+    
     try:
         # AFILIADO
         for a in re.findall(regex_afiliado, nuevo_texto):
@@ -101,20 +111,15 @@ def leer_pdf(ruta_pdfs):
         # MEDICACION
         for m in re.findall(regex_codigo_medicacion, nuevo_texto):
             juego_tuplas_medicamentos.append(m)
-        
-        # CANTIDADES
-        for c in re.findall(regex_cantidades, nuevo_texto):
-            time.sleep(1.5)
-            print(c)
-    
+
     except Exception as e:
-        return e, ruta_pdfs
+        return False, False
     
     # # Validamos afiliado y medicacion.
     if lista_afiliado != []:
-        return lista_afiliado, juego_tuplas_medicamentos, cantidades
+        return lista_afiliado, juego_tuplas_medicamentos
     else:
-        return False
+        return False, False
 
 
 
@@ -129,11 +134,14 @@ if __name__ == "__main__":
             print("\tListando PDF:")
             if pdf.endswith(".pdf"):
                 print(f"\t\t* {pdf}")
-                lista_afiliado, lista_tuplas_medicacion, cantidades = leer_pdf(os.path.join(rutas.carpeta_pdfs, pdf))
+                lista_afiliado, lista_tuplas_medicacion = leer_pdf(os.path.join(rutas.carpeta_pdfs, pdf))
                 # leer_pdf(os.path.join(rutas.carpeta_pdfs, pdf))
                 
-                if lista_afiliado != False and lista_tuplas_medicacion != False and cantidades != False:
-                    armar_descripcion_medicamento(lista_tuplas_medicacion, cantidades)
+                if lista_afiliado != False and lista_tuplas_medicacion != False:
+                    # Ordenar la medicacion en listas, y las cantidades por separado.
+                    materiales, cantidades = grupos_ordenados = limpiar_grupos(lista_tuplas_medicacion)
+                    armar_diccionario_medicacion_cantidades(materiales, cantidades)
+                    
                 else:
                     print(f"\t\t No se pudo encontrar medicacion para el PDF {pdf}")
                 
