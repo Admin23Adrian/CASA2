@@ -143,7 +143,7 @@ def leer_pdf(ruta_pdfs):
         for m in re.findall(regex_codigo_medicacion, nuevo_texto):
             juego_tuplas_medicamentos.append(m)
 
-        print(re.findall('(Observ: )([0-9])*\s', nuevo_texto))
+        # print(re.findall('Observ: [0-9] [0-9] +', nuevo_texto))
         
         # for c in re.findall(r'(Observ: )([0-9])*\s', nuevo_texto):
         #     cantidades.append(c)
