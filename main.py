@@ -75,7 +75,6 @@ def limpiar_caracteres(texto_lista):
         return False
 
 
-
 # Pegar datos a Excel. Parametro fl = (fila excel)
 def excel(ruta_excel, afiliado, medicacion_lista, cantidades, fl):
     print(f"\t\t# INTENTANDO ACCEDER AL EXCEL...")
@@ -132,7 +131,7 @@ def leer_pdf(ruta_pdfs):
     # == EXPRESIONES REGULARES == #
     regex_codigo_medicacion = r'(Productos\s)([0-9]*\s*)([A-Z]*\s*)([a-zA-Z0-9./+]*\s*)([(a-zA-Z0-9/+).+]*\s*)([(a-z0-9/+).+]*\s*)([a-z0-9./+ ]*)|(Observ:\s)([0-9]*\s*)([A-Z]*\s*)([a-zA-Z0-9.]*\s*)([(a-zA-Z).+]*\s*)([(a-zA-z0-9).+]*\s*)([a-z0-9 +.]*)'
     regex_afiliado = r'([0-9]{5,13})([\/]\d{1,2}\s)([A-Z, ]+)'
-    regex_cantidades = r'Observ:\s([0-9]+\s)*'
+    regex_cantidades = r'(\s[0-9]{1,2})'
     
     try:
         # AFILIADO
@@ -142,19 +141,16 @@ def leer_pdf(ruta_pdfs):
         # MEDICACION
         for m in re.findall(regex_codigo_medicacion, nuevo_texto):
             juego_tuplas_medicamentos.append(m)
-
-        # print(re.findall('Observ: [0-9] [0-9] +', nuevo_texto))
         
-        # for c in re.findall(r'(Observ: )([0-9])*\s', nuevo_texto):
-        #     cantidades.append(c)
-        # print(f"{cantidades}")
+        for c in re.findall(regex_cantidades, nuevo_texto):
+            cantidades.append(c)
 
     except Exception as e:
         return False, False
     
     # # Validamos afiliado y medicacion.
     if lista_afiliado != []:
-        return lista_afiliado, juego_tuplas_medicamentos
+        return lista_afiliado, juego_tuplas_medicamentos, cantidades
     else:
         return False, False
 
@@ -171,19 +167,16 @@ if __name__ == "__main__":
             print("\tListando PDF:")
             if pdf.endswith(".pdf"):
                 print(f"\t\t* {pdf}")
-                lista_afiliado, lista_tuplas_medicacion = leer_pdf(os.path.join(rutas.carpeta_pdfs, pdf))
-                print()
-                # print(lista_tuplas_medicacion)
+                lista_afiliado, lista_tuplas_medicacion, cantidades = leer_pdf(os.path.join(rutas.carpeta_pdfs, pdf))
                 
                 
-                # if lista_afiliado != False and lista_tuplas_medicacion != False:
+                if lista_afiliado != False and lista_tuplas_medicacion != False:
                     
-                #     cantidades_limpias, materiales_limpios, codigos_troqueles = limpiar_grupos(lista_tuplas_medicacion)
-                #     # fila = excel(rutas.archivo_excel, lista_afiliado, materiales_limpios, cantidades_limpias, f)
-                # else:
-                #     print(f"\t\t No se pudo encontrar medicacion para el PDF {pdf}")
-                #     # f = f + 1
-                # # fila = fila + 1
+                    cantidades_limpias, materiales_limpios, codigos_troqueles = limpiar_grupos(lista_tuplas_medicacion)
+                    # fila = excel(rutas.archivo_excel, lista_afiliado, materiales_limpios, cantidades_limpias, f)
+                else:
+                    print(f"\t\t No se pudo encontrar medicacion para el PDF {pdf}")
+                #     
 
     except Exception as e:
         print("***** Nada que listar en la carpeta de PDFS! *****")
