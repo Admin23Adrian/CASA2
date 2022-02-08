@@ -9,11 +9,10 @@ import regex
 
 
 # Limpiar y unir los datos que vienen el tuplas.
-def limpiar_grupos(lista_medicacion):
+def limpiar_grupos(lista_medicacion, lista_cantidades):
     """LA FUNCION SE ENCARGA DE LIMPIAR Y ARMAR LAS LISTAS FINALES DE CANTIDADES
     Y DE CADA POSICION DE MATERIAL"""
     lista = []
-    cantidades = []
     lista_final_cantidades = []
     lista_codigo_troquel = []
 
@@ -29,27 +28,21 @@ def limpiar_grupos(lista_medicacion):
             lista.append(palabras)
             # print(palabras)
             
-        # Por este camino entraria si es el ultimo grupo (grupo de cantidades)
-        else:
-            for cant in grupo:
-                if cant != "" and cant != "Productos " and cant != "Observ: ":
-                    palabras.append(cant.rstrip())
-            cantidades.append(palabras)
-            
         k = k + 1
 
-    # MANIPULAR LAS LISTAS
-    for el in cantidades[0]:
-        nuevo_el = el.split(' ')
-        lista_final_cantidades = lista_final_cantidades + nuevo_el
-    
-    # ELIMINAMOS CADENAS EN LA ULTIMA POSIC DE LA LISTA DE CANTIDADES.
-    cadena_en_cantidades = lista_final_cantidades[-1]
-    try:
-        int(cadena_en_cantidades)
-    except:
-        lista_final_cantidades.pop(lista_final_cantidades.index(cadena_en_cantidades))
-    
+    # MANIPULAR LA LISTA DE LAS CANTIDADES EXTRAIDAS CON REGEX
+    pos_cant = len(lista) #cantidad de posiciones de cantidad que deberia haber
+    inicio = len(lista_cantidades) - pos_cant #para controlar el slicing
+    if len(lista_cantidades) - inicio < len(lista):
+        print("----------- ¡¡ALERTA!! -------------")
+        print("\tLA CANTIDAD DE POSICIONES NO COINCIDE CON LA CANTIDAD DE POSICIONES DE CANTIDAD")
+        return #termino la funcion si esto se cumple
+    else:
+        lista_final_cantidades = lista_cantidades[inicio:] # lista ordenada de cantidades por posicion
+        lista_cantidades.clear()
+
+
+
     # EXTRAER CODIGO DE TROQUEL SI EXISTIESE Y MOSTRAR RESULTADO FINAL
     for t in range(len(lista)):
         codigo_troquel = lista[t][0]
@@ -126,7 +119,7 @@ def leer_pdf(ruta_pdfs):
         lectura = slate3k.PDF(archivo)  # Se devuelve el texto como un string dentro de una lista.  
     
     nuevo_texto = limpiar_caracteres(lectura[0])
-    print(nuevo_texto)
+    # print(nuevo_texto)
     
     # == EXPRESIONES REGULARES == #
     regex_codigo_medicacion = r'(Productos\s)([0-9]*\s*)([A-Z]*\s*)([a-zA-Z0-9./+]*\s*)([(a-zA-Z0-9/+).+]*\s*)([(a-z0-9/+).+]*\s*)([a-z0-9./+ ]*)|(Observ:\s)([0-9]*\s*)([A-Z]*\s*)([a-zA-Z0-9.]*\s*)([(a-zA-Z).+]*\s*)([(a-zA-z0-9).+]*\s*)([a-z0-9 +.]*)'
@@ -167,13 +160,13 @@ if __name__ == "__main__":
             print("\tListando PDF:")
             if pdf.endswith(".pdf"):
                 print(f"\t\t* {pdf}")
-                lista_afiliado, lista_tuplas_medicacion, cantidades = leer_pdf(os.path.join(rutas.carpeta_pdfs, pdf))
+                lista_afiliado, lista_tuplas_medicacion, lista_cantidades = leer_pdf(os.path.join(rutas.carpeta_pdfs, pdf))
                 
                 
                 if lista_afiliado != False and lista_tuplas_medicacion != False:
-                    
-                    cantidades_limpias, materiales_limpios, codigos_troqueles = limpiar_grupos(lista_tuplas_medicacion)
-                    # fila = excel(rutas.archivo_excel, lista_afiliado, materiales_limpios, cantidades_limpias, f)
+                    limpiar_grupos(lista_tuplas_medicacion, lista_cantidades)
+                    # cantidades_limpias, materiales_limpios, cantidades_limpias = limpiar_grupos(lista_tuplas_medicacion, lista_cantidades)
+                
                 else:
                     print(f"\t\t No se pudo encontrar medicacion para el PDF {pdf}")
                 #     
