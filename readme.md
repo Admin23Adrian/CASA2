@@ -38,5 +38,10 @@ r'(Productos\s)([0-9]*\s*)([A-Z]*\s*)([a-zA-Z0-9./+]*\s*)([(a-zA-Z0-9/+).+]*\s*)
 ```
 3. Expresion Regex para sacar las cantidades de cada medicamento:
 ```
-(Observ:\s+)([0-9]{1,2}\s)+
+(\s[0-9]{1,2})
 ```
+
+## 25/02/2022
+1. Convenio 100% : 001
+2. Convenio SUR: 012
+3. Convenio Plan Baires: 087

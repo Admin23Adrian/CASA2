@@ -4,7 +4,6 @@ import openpyxl
 import os
 import time
 import rutas #importacion de modulo donde defino las rutas.
-import regex
 
 
 
@@ -80,21 +79,13 @@ def excel(ruta_excel, afiliado, medicacion_lista, cantidades, cod_troquel):
     try:
         print(f"\t\t> Se accedio correctamente.")
         for i in range(len(medicacion_lista)):
-            hoja[f"B{fila}"].value = codigo_afiliado
-            hoja[f"C{fila}"].value = " ".join(medicacion_lista[i])
+            hoja[f"A{fila}"].value = " ".join(medicacion_lista[i])
+            hoja[f"B{fila}"].value = codigo_afiliado.rstrip()
+            hoja[f"C{fila}"].value = cod_troquel[i]
             hoja[f"D{fila}"].value = " ".join(cantidades[i])
             fila += 1
 
-        # # Verificamos si el valor se pego correctamente en las celdas.
-        # if hoja[f"B{fl}"].value != None:
-        #     print(f"\t\t> El afiliado {afiliado} se pego correctamente al Excel.")
-        # else:
-        #     print(f"\t\t> El afiliado {afiliado} NO SE HA PODIDO PEGAR EN EL EXCEL. Se deja LOG.")
-        
-        # if hoja[f"C{fl}"].value != None:
-        #     print(f"\t\t> La medicacion {afiliado} se pego correctamente al Excel.")
-        # else:
-        #     print(f"\t\t> La medicacion {afiliado} NO SE HA PODIDO PEGAR EN EL EXCEL. Se deja LOG.")
+
     except Exception as e:
         print(f"Ha ocurrido una excepcion. Posiblemente hay un error con el EXCEL. {e}")
     # Guardamos y cerramos el excel.
@@ -124,7 +115,7 @@ def leer_pdf(ruta_pdfs):
     regex_codigo_medicacion = r'(Productos\s)([0-9]*\s*)([A-Z]*\s*)([a-zA-Z0-9./+]*\s*)([(a-zA-Z0-9/+).+]*\s*)([(a-z0-9/+).+]*\s*)([a-z0-9./+ ]*)|(Observ:\s)([0-9]*\s*)([A-Z]*\s*)([a-zA-Z0-9.]*\s*)([(a-zA-Z).+]*\s*)([(a-zA-z0-9).+]*\s*)([a-z0-9 +.]*)'
     regex_afiliado = r'([0-9]{5,13})([\/]\d{1,2}\s)([A-Z, ]+)'
     regex_cantidades = r'(\s[0-9]{1,2})'
-    
+    regex_ped_ext = r'(Nro.:\s)([0-9]{2,9})'
     try:
         # AFILIADO
         for a in re.findall(regex_afiliado, nuevo_texto):
@@ -136,6 +127,7 @@ def leer_pdf(ruta_pdfs):
         
         for c in re.findall(regex_cantidades, nuevo_texto):
             cantidades.append(c)
+
 
     except Exception as e:
         return False, False
@@ -165,7 +157,7 @@ if __name__ == "__main__":
                 if lista_afiliado != False and lista_tuplas_medicacion != False:
                     lista_materiales, lista_cantidades, lista_codigos_troquel = limpiar_grupos(lista_tuplas_medicacion, tupla_cantidades)
                     # print(lista_materiales, lista_cantidades, lista_codigos_troquel)
-                    excel(rutas.archivo_excel, lista_afiliado, lista_materiales, lista_cantidades, lista_codigos_troquel)
+                    # excel(rutas.archivo_excel, lista_afiliado, lista_materiales, lista_cantidades, lista_codigos_troquel)
                 else:
                     print(f"\t\t No se pudo encontrar medicacion para el PDF {pdf}")
 
