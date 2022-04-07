@@ -46,7 +46,7 @@ def va01_2(sesionsap, canal, sector, ped_ext, dispone, fecha_entrega, lista_id_p
           session.findById("wnd[0]/usr/subSUBSCREEN_HEADER:SAPMV45A:4021/txtVBKD-BSTKD").setFocus()
           session.findById("wnd[0]/usr/subSUBSCREEN_HEADER:SAPMV45A:4021/txtVBKD-BSTKD").caretPosition = 8
           session.findById("wnd[0]").sendVKey(0)
-          session.findById("wnd[1]").sendVKey(0)
+          session.findById("wnd[0]").sendVKey(0)
           session.findById("wnd[0]").sendVKey(0)
                     
           session.findById("wnd[0]/usr/tabsTAXI_TABSTRIP_OVERVIEW/tabpT\\01/ssubSUBSCREEN_BODY:SAPMV45A:4400/ssubHEADER_FRAME:SAPMV45A:4440/ctxtRV45A-KETDAT").text = fecha_entrega
