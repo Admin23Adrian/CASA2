@@ -101,6 +101,7 @@ def leer_pdf(ruta_pdfs):
     juego_tuplas_medicamentos = []
     lista_afiliado = []
     cantidades = []
+    pedidos_ext = []
     
 
     # Usamos la libreria Slate3k para extraer el texto del pdf.
@@ -128,13 +129,16 @@ def leer_pdf(ruta_pdfs):
         for c in re.findall(regex_cantidades, nuevo_texto):
             cantidades.append(c)
 
+        # PED EXT
+        for p in re.findall(regex_ped_ext, nuevo_texto):
+            pedidos_ext.append(p)
 
     except Exception as e:
         return False, False
     
     # Validamos afiliado y medicacion.
     if lista_afiliado != []:
-        return lista_afiliado, juego_tuplas_medicamentos, cantidades
+        return lista_afiliado, juego_tuplas_medicamentos, cantidades, pedidos_ext[0][1]
     else:
         return False, False
 
@@ -151,7 +155,8 @@ if __name__ == "__main__":
             print("\tListando PDF:")
             if pdf.endswith(".pdf"):
                 print(f"\t\t* {pdf}")
-                lista_afiliado, lista_tuplas_medicacion, tupla_cantidades = leer_pdf(os.path.join(rutas.carpeta_pdfs, pdf))
+                lista_afiliado, lista_tuplas_medicacion, tupla_cantidades, pedido_externo = leer_pdf(os.path.join(rutas.carpeta_pdfs, pdf))
+                print(pedido_externo)
                 
                 print(fila)
                 if lista_afiliado != False and lista_tuplas_medicacion != False:
