@@ -22,7 +22,7 @@ POR FAVOR ACTUALIZAR LOS AVANZES DEL DESARROLLO EN ESTE ARCHIVO. ES IMPORTANTE A
 ([a-zA-Z]{2})|([0-9]{5,13})([/][0-9]{1,2})*
 ```
 
-# 17/12/2021
+## 17/12/2021
 1. Ayer se avanzo con la expresion regular para extraer el nombre del medicamento del PDF.
 2. Obtuvimos el listado de materiales disponibles que el cliente tiene a disposicion en sap.
 3. La expresion regular construida hasta el momento para el medicamento:
@@ -36,3 +36,12 @@ POR FAVOR ACTUALIZAR LOS AVANZES DEL DESARROLLO EN ESTE ARCHIVO. ES IMPORTANTE A
 ```
 r'(Productos\s)([0-9]*\s*)([A-Z]*\s*)([a-zA-Z0-9./+]*\s*)([(a-zA-Z0-9/+).+]*\s*)([(a-z0-9/+).+]*\s*)([a-z0-9./+ ]*)|(Observ:\s)([0-9]*\s*)([A-Z]*\s*)([a-zA-Z0-9.]*\s*)([(a-zA-Z).+]*\s*)([(a-zA-z0-9).+]*\s*)([a-z0-9+. ]*)'
 ```
+3. Expresion Regex para sacar las cantidades de cada medicamento:
+```
+(\s[0-9]{1,2})
+```
+
+## 25/02/2022
+1. Convenio 100% : 001
+2. Convenio SUR: 012
+3. Convenio Plan Baires: 087
