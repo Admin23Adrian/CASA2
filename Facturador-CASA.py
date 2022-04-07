@@ -12,7 +12,7 @@ import openpyxl
 from shutil import copy
 import shutil
 import pythoncom
-from main import lectorPdfs
+from lecturaPdf import lectorPdf
 import time
 
 
@@ -153,7 +153,7 @@ def interfaz():
      
      
      def lecturaPdfs():
-          resultado_lectura = lectorPdfs()
+          resultado_lectura = lectorPdf()
           print(resultado_lectura)
 
      
