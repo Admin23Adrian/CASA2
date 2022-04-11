@@ -112,7 +112,7 @@ def interfaz():
                          print(f"\tSE FACTURA MATERIALES: {l_mat_facturar}\n\n")
                          pedidova01 = va01_2(0, l_canales[i-1], l_sectores[i-1], l_ped_ext[i-1], l_dispones[i-1], fecha_entrega[i-1], l_mat_facturar, l_cant_facturar, l_convenios[i-1], l_descripciones_facturar)
                          time.sleep(1)
-                         _toma = toma(0, pedidova01, l_dispones[i-1], afiliado_anterior)
+                         _toma = toma(0, pedidova01, l_dispones[i-1], afiliado_anterior, l_canales[i-1])
 
                          # Completar Excel con pedido generado
                          for fila in l_filas:
@@ -134,7 +134,7 @@ def interfaz():
                          print(f"\tSE FACTURA MATERIALES: {l_mat_facturar}")
                          pedidova01 = va01_2(0, l_canales[i], l_sectores[i], l_ped_ext[i], l_dispones[i], fecha_entrega[i], l_mat_facturar, l_cant_facturar, l_convenios[i], l_descripciones_facturar)
                          time.sleep(1)
-                         _toma = toma(0, pedidova01, l_dispones[i], afiliado_actual)
+                         _toma = toma(0, pedidova01, l_dispones[i], afiliado_actual, l_canales[i])
 
                          # Completar Excel con pedido generado
                          for fila in l_filas:
