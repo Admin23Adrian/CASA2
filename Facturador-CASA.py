@@ -36,7 +36,7 @@ def interfaz():
 
           pythoncom.CoInitialize()
           # Crear una copia del excel padre.
-          shutil.copy(rutas.archivo_excel, rutas.archivo_excel_trabajo)
+          # shutil.copy(rutas.archivo_excel, rutas.archivo_excel_trabajo)
 
           #---------VARIABLES--------#
           afiliado_anterior = None
@@ -62,7 +62,7 @@ def interfaz():
           #---------------------------#
           
           try:
-               # excel_trabajo = load_workbook(rutas.archivo_excel_trabajo, data_only=True)
+               excel_trabajo = load_workbook(rutas.archivo_excel_trabajo, data_only=True)
                excel_trabajo = openpyxl.load_workbook(filename=rutas.archivo_excel_trabajo, data_only=True)
                
                h_t = excel_trabajo["inicio"]
@@ -94,7 +94,7 @@ def interfaz():
                          filas_completar.append(str(i))
                print(f"Filas a completar:", filas_completar)
 
-               # --> FACTURACION <--
+               # -> FACTURACION <--
                for i in range(len(l_afiliados_sap)):
                     afiliado_actual = l_afiliados_sap[i]
 

@@ -35,7 +35,7 @@ def toma(sesionsap, ped_final, dispone, afiliado_sap, canal):
     
     try:
 
-        session.findById("wnd[0]").maximize()
+        #session.findById("wnd[0]").maximize()
         session.findById("wnd[0]/tbar[0]/okcd").text = "/NZSD_TOMA"
         session.findById("wnd[0]").sendVKey(0)
         session.findById("wnd[0]/tbar[1]/btn[7]").press()
@@ -49,7 +49,10 @@ def toma(sesionsap, ped_final, dispone, afiliado_sap, canal):
         session.findById("wnd[0]/usr/tabsTABS/tabpTAB_PED/ssubTABS_SCA:ZDMSD_TOMA_PEDIDO:0101/cmbZSD_TOMA_CABEC-LIFSK").key = "00"
         session.findById("wnd[0]/usr/tabsTABS/tabpTAB_ENT").select()
         session.findById("wnd[0]/usr/tabsTABS/tabpTAB_ENT/ssubTABS_SCA:ZDMSD_TOMA_PEDIDO:0102/ctxtGS_ENTREGA-AFIL_NRO").text = afiliado_sap
-        # session.findById("wnd[0]/usr/tabsTABS/tabpTAB_ENT/ssubTABS_SCA:ZDMSD_TOMA_PEDIDO:0102/ctxtGS_ENTREGA-DISPONE_ID").text = dispone
+        
+        if canal != "10":
+            session.findById("wnd[0]/usr/tabsTABS/tabpTAB_ENT/ssubTABS_SCA:ZDMSD_TOMA_PEDIDO:0102/ctxtGS_ENTREGA-DISPONE_ID").text = dispone
+        
         session.findById("wnd[0]/usr/tabsTABS/tabpTAB_ENT/ssubTABS_SCA:ZDMSD_TOMA_PEDIDO:0102/ctxtGS_ENTREGA-DISPONE_ID").setFocus()
         session.findById("wnd[0]/usr/tabsTABS/tabpTAB_ENT/ssubTABS_SCA:ZDMSD_TOMA_PEDIDO:0102/ctxtGS_ENTREGA-DISPONE_ID").caretPosition = 8
         session.findById("wnd[0]").sendVKey(0)
@@ -61,11 +64,33 @@ def toma(sesionsap, ped_final, dispone, afiliado_sap, canal):
         session.findById("wnd[0]/usr/tabsTABS/tabpTAB_PED").select()
         session.findById("wnd[0]/usr/tabsTABS/tabpTAB_PED/ssubTABS_SCA:ZDMSD_TOMA_PEDIDO:0101/subSUBS_TRAB:ZDMSD_TOMA_PEDIDO:0111/btnBTN_SIMULAR").press()
         
-        session.findById("wnd[0]/tbar[0]/btn[11]").press()
-        session.findById("wnd[1]/tbar[0]/btn[0]").press()
-        return f"{ped_final} OK"
+        try:
+            session.findById("wnd[0]/tbar[0]/btn[11]").press()
+            session.findById("wnd[1]/usr/btnBUTTON_1").press()
+        except:    
+            session.findById("wnd[1]/usr/btnBUTTON_1").press()
+        
+        try:
+            session.findById("wnd[1]/usr/btnBUTTON_1").press()
+        except:
+            try:
+                ##sincartel11:
+                session.findById("wnd[1]/usr/btnBUTTON_1").press()
+            except:
+                ##sinvalidacion:
+                session.findById("wnd[1]/tbar[0]/btn[0]").press()
+        try:
+            session.findById("wnd[0]/tbar[1]/btn[7]").press()
+            session.findById("wnd[1]").sendVKey(0)
+            session.findById("wnd[1]").sendVKey(0)
+        except:
+            session.findById("wnd[1]").sendVKey(0)
+            session.findById("wnd[1]").sendVKey(0)
+            return ped_final
+        return ped_final
+    
     except:
         time.sleep(3)
         return f"{ped_final} NO CERRADO"
     
-toma(0, "5532120", "", "85072169")
+#toma(0, "5532120", "", "85072169")
