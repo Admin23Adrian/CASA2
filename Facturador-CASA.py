@@ -14,6 +14,7 @@ import shutil
 import pythoncom
 from lecturaPdf import lectorPdf
 import time
+from openpyxl import load_workbook
 
 
 def interfaz():
@@ -36,7 +37,7 @@ def interfaz():
 
           pythoncom.CoInitialize()
           # Crear una copia del excel padre.
-          # shutil.copy(rutas.archivo_excel, rutas.archivo_excel_trabajo)
+          shutil.copy(rutas.archivo_excel, rutas.archivo_excel_trabajo)
 
           #---------VARIABLES--------#
           afiliado_anterior = None
@@ -61,10 +62,9 @@ def interfaz():
           l_filas = []
           #---------------------------#
           
+          excel_trabajo = load_workbook(rutas.archivo_excel_trabajo, data_only=True)
+          excel_trabajo = openpyxl.load_workbook(filename=rutas.archivo_excel_trabajo, data_only=True)
           try:
-               excel_trabajo = load_workbook(rutas.archivo_excel_trabajo, data_only=True)
-               excel_trabajo = openpyxl.load_workbook(filename=rutas.archivo_excel_trabajo, data_only=True)
-               
                h_t = excel_trabajo["inicio"]
                cont = 9
                max_filas = cont

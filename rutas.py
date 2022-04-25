@@ -5,7 +5,7 @@ from getpass import getuser
 usuario = getuser()
 
 # --> obtenemos la ruta del directorio actual.
-directorio_raiz = "C:/Users/aalarcon/Desktop/CASA"
+directorio_raiz = f"C:/Users/{usuario}/Desktop/CASA"
 
 # --> Armamos la ruta del directorio de archivos.
 directorio_archivos = directorio_raiz + "/" + "archivos"

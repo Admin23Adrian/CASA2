@@ -84,10 +84,10 @@ def va01_2(sesionsap, canal, sector, ped_ext, dispone, fecha_entrega, lista_id_p
           session.findById("wnd[0]/usr/tabsTAXI_TABSTRIP_HEAD/tabpT\\13/ssubSUBSCREEN_BODY:SAPMV45A:4312/sub8309:SAPMV45A:8309/ctxtVBAK-ZZTURNO").caretPosition = 3
 
           #Hace falta agregar una excepcion en este punto?
-          session.findById("wnd[0]").sendVKey(0)
           session.findById("wnd[0]/tbar[0]/btn[11]").press()
-          ped = session.findById("wnd[0]/sbar").text #Mensaje del SideBar una vez se carga en la VA01
-          ped_final = ped[18:25] #Del mensaje del SideBar tomamos solamente el NroDePedido
+          time.sleep(3)
+          ped = session.findById("wnd[0]/sbar").text
+          ped_final = ped[18:25]
           return ped_final
 
      except Exception as e:

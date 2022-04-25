@@ -91,6 +91,6 @@ def toma(sesionsap, ped_final, dispone, afiliado_sap, canal):
     
     except:
         time.sleep(3)
-        return f"{ped_final} NO CERRADO"
+        return f"{ped_final}"
     
-#toma(0, "5532120", "", "85072169")
+toma(0, "5558119", "84000959", "85535568", "02")
